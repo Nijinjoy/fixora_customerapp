@@ -1,11 +1,19 @@
 package com.fixora_customerapp
 
+import android.os.Bundle
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 
 class MainActivity : ReactActivity() {
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    // The window keeps the brand splash background (LaunchTheme) while
+    // React Native loads, so the JS splash screen follows without a white flash.
+    // react-native-screens: don't restore fragments after the process is killed.
+    super.onCreate(null)
+  }
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule

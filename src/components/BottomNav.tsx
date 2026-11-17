@@ -1,39 +1,51 @@
-import { useState } from 'react';
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Pressable, StyleSheet, View } from 'react-native';
 import {
   CalendarDays,
   House,
+  type LucideIcon,
   MessageSquareText,
   UserRound,
 } from 'lucide-react-native';
 import { colors, gradients, shadow } from '../theme/colors';
 
-const tabs = [
-  { key: 'home', Icon: House, label: 'Home' },
-  { key: 'messages', Icon: MessageSquareText, label: 'Messages' },
-  { key: 'bookings', Icon: CalendarDays, label: 'Bookings' },
-  { key: 'profile', Icon: UserRound, label: 'Profile' },
-] as const;
-
-type Props = {
-  bottomInset: number;
+const tabMeta: Record<string, { Icon: LucideIcon; label: string }> = {
+  Home: { Icon: House, label: 'Home' },
+  Messages: { Icon: MessageSquareText, label: 'Messages' },
+  Bookings: { Icon: CalendarDays, label: 'Bookings' },
+  Account: { Icon: UserRound, label: 'Profile' },
 };
 
-export function BottomNav({ bottomInset }: Props) {
-  const [active, setActive] = useState<string>('home');
-
+export function BottomNav({ state, navigation, insets }: BottomTabBarProps) {
   return (
     <View
-      style={[styles.wrapper, { bottom: Math.max(bottomInset, 12) }]}
+      style={[styles.wrapper, { bottom: Math.max(insets.bottom, 12) }]}
       pointerEvents="box-none"
     >
       <View style={styles.bar}>
-        {tabs.map(({ key, Icon, label }) => {
-          const isActive = key === active;
+        {state.routes.map((route, index) => {
+          const meta = tabMeta[route.name];
+          if (!meta) {
+            return null;
+          }
+          const { Icon, label } = meta;
+          const isActive = state.index === index;
+
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            });
+            if (!isActive && !event.defaultPrevented) {
+              navigation.navigate(route.name, route.params);
+            }
+          };
+
           return (
             <Pressable
-              key={key}
-              onPress={() => setActive(key)}
+              key={route.key}
+              onPress={onPress}
               accessibilityRole="tab"
               accessibilityLabel={label}
               accessibilityState={{ selected: isActive }}

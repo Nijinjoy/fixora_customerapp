@@ -1,14 +1,16 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { CalendarCheck, Eye, Star } from 'lucide-react-native';
 import { Avatar } from './Avatar';
+import { CategoryTag } from './CategoryTag';
 import type { Provider } from '../data/home';
 import { colors, gradients, shadow } from '../theme/colors';
 
 type Props = {
   provider: Provider;
+  onViewProfile: (providerId: string) => void;
 };
 
-export function ProviderCard({ provider }: Props) {
+export function ProviderCard({ provider, onViewProfile }: Props) {
   return (
     <View style={styles.card}>
       <View style={styles.top}>
@@ -36,12 +38,15 @@ export function ProviderCard({ provider }: Props) {
             </Text>
           </View>
         </View>
-        <View style={styles.tag}>
-          <Text style={styles.tagText}>{provider.category}</Text>
-        </View>
+        <CategoryTag label={provider.category} />
       </View>
       <View style={styles.actions}>
-        <Pressable style={[styles.button, styles.outline]}>
+        <Pressable
+          style={[styles.button, styles.outline]}
+          onPress={() => onViewProfile(provider.id)}
+          accessibilityRole="button"
+          accessibilityLabel={`View ${provider.name}'s profile`}
+        >
           <Eye size={15} color={colors.text} strokeWidth={1.8} />
           <Text style={styles.outlineText}>View Profile</Text>
         </Pressable>
@@ -92,17 +97,6 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 12,
     color: colors.textMuted,
-  },
-  tag: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    experimental_backgroundImage: gradients.accentButton,
-  },
-  tagText: {
-    fontSize: 10,
-    fontWeight: '500',
-    color: '#FFFFFF',
   },
   actions: {
     flexDirection: 'row',

@@ -74,12 +74,15 @@ export function FilterChips({
 }
 
 const styles = StyleSheet.create({
+  // Keep the full chip height: a ScrollView shrinks by default when the
+  // list below it is taller than the screen, which cut off the chips.
   scroll: {
     flexGrow: 0,
+    flexShrink: 0,
   },
   row: {
     gap: 10,
-    paddingVertical: 4,
+    paddingVertical: 8,
   },
   chip: {
     height: 42,

@@ -1,6 +1,5 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BottomNav } from '../components/BottomNav';
 import { HomeHeader } from '../components/HomeHeader';
 import { PromoBanner } from '../components/PromoBanner';
 import { ProviderCard } from '../components/ProviderCard';
@@ -8,10 +7,10 @@ import { SearchBar } from '../components/SearchBar';
 import { SectionHeader } from '../components/SectionHeader';
 import { ServiceGrid } from '../components/ServiceGrid';
 import { popularProviders, services, user } from '../data/home';
-import type { RootScreenProps } from '../navigation/types';
+import type { TabScreenProps } from '../navigation/types';
 import { gradients } from '../theme/colors';
 
-export function HomeScreen({ navigation }: RootScreenProps<'Home'>) {
+export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
   const insets = useSafeAreaInsets();
   const openServices = (serviceId?: string) =>
     navigation.navigate('Services', serviceId ? { serviceId } : undefined);
@@ -52,11 +51,16 @@ export function HomeScreen({ navigation }: RootScreenProps<'Home'>) {
             onViewAll={() => openServices()}
           />
           {popularProviders.map(provider => (
-            <ProviderCard key={provider.id} provider={provider} />
+            <ProviderCard
+              key={provider.id}
+              provider={provider}
+              onViewProfile={providerId =>
+                navigation.navigate('Profile', { providerId })
+              }
+            />
           ))}
         </View>
       </ScrollView>
-      <BottomNav bottomInset={insets.bottom} />
     </View>
   );
 }

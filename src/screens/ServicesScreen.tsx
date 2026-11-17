@@ -24,7 +24,9 @@ export function ServicesScreen({
   const [selected, setSelected] = useState(route.params?.serviceId ?? ALL);
 
   const goBack = () =>
-    navigation.canGoBack() ? navigation.goBack() : navigation.navigate('Home');
+    navigation.canGoBack()
+      ? navigation.goBack()
+      : navigation.navigate('Tabs', { screen: 'Home' });
 
   const visibleProviders = useMemo(
     () =>
@@ -59,7 +61,14 @@ export function ServicesScreen({
       <FlatList
         data={visibleProviders}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => <ProviderCard provider={item} />}
+        renderItem={({ item }) => (
+          <ProviderCard
+            provider={item}
+            onViewProfile={providerId =>
+              navigation.navigate('Profile', { providerId })
+            }
+          />
+        )}
         contentContainerStyle={[
           styles.list,
           { paddingBottom: insets.bottom + 24 },
