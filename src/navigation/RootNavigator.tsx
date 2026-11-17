@@ -10,14 +10,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export function RootNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Services"
+      <Stack.Navigator
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: colors.background },
         }}
       >
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Services" component={ServicesScreen} initialParams={{ serviceId: "roofer" }} />
+        <Stack.Screen name="Services" component={ServicesScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

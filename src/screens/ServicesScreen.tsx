@@ -6,7 +6,7 @@ import { FilterChips } from '../components/FilterChips';
 import { ProviderCard } from '../components/ProviderCard';
 import { providers, services } from '../data/home';
 import type { RootScreenProps } from '../navigation/types';
-import { colors, gradients, shadow } from '../theme/colors';
+import { colors, gradients } from '../theme/colors';
 
 const ALL = 'all';
 const GUTTER = 18;
@@ -42,9 +42,9 @@ export function ServicesScreen({
           style={styles.back}
           accessibilityRole="button"
           accessibilityLabel="Go back"
-          hitSlop={6}
+          hitSlop={12}
         >
-          <ArrowLeft size={20} color={colors.text} strokeWidth={1.8} />
+          <ArrowLeft size={24} color={colors.text} strokeWidth={2} />
         </Pressable>
         <Text style={styles.title}>Most Popular Services</Text>
       </View>
@@ -86,13 +86,8 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   back: {
-    width: 44,
     height: 44,
-    borderRadius: 12,
-    backgroundColor: colors.surface,
-    alignItems: 'center',
     justifyContent: 'center',
-    boxShadow: shadow.card,
   },
   title: {
     fontSize: 17,
