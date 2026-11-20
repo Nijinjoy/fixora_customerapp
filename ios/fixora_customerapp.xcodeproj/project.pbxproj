@@ -9,10 +9,15 @@
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-fixora_customerapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-fixora_customerapp.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		18CA68717AF9293A35B34CD8 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F701C6F9985BF3145507AEA4 /* Poppins-SemiBold.ttf */; };
+		49EE16D89421CAB306A1A1CE /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 93C12AD11CA4739028E2EA40 /* Poppins-Bold.ttf */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		761780EF2CA45674006654EF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EE2CA45674006654EF /* SceneDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		C059D2572BB26B2BACC5E6D9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		D2281FD7C2FCB8D2D7885569 /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B70303B44390C6AFEB1F560 /* Poppins-ExtraBold.ttf */; };
+		F2F97F35EF7D7CF4D40D03C4 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B99C5666D2E392D47DD2A70F /* Poppins-Regular.ttf */; };
+		FDA289A1F52D9E4CD2F07508 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F87826BFAD334E2AEA9B86E /* Poppins-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,13 +25,18 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = fixora_customerapp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = fixora_customerapp/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = fixora_customerapp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		2F87826BFAD334E2AEA9B86E /* Poppins-Medium.ttf */ = {isa = PBXFileReference; includeInIndex = 1; path = "Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-fixora_customerapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fixora_customerapp.debug.xcconfig"; path = "Target Support Files/Pods-fixora_customerapp/Pods-fixora_customerapp.debug.xcconfig"; sourceTree = "<group>"; };
+		3B70303B44390C6AFEB1F560 /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; includeInIndex = 1; path = "Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-fixora_customerapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fixora_customerapp.release.xcconfig"; path = "Target Support Files/Pods-fixora_customerapp/Pods-fixora_customerapp.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-fixora_customerapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-fixora_customerapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = fixora_customerapp/AppDelegate.swift; sourceTree = "<group>"; };
 		761780EE2CA45674006654EF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = fixora_customerapp/SceneDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = fixora_customerapp/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		93C12AD11CA4739028E2EA40 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; includeInIndex = 1; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
+		B99C5666D2E392D47DD2A70F /* Poppins-Regular.ttf */ = {isa = PBXFileReference; includeInIndex = 1; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F701C6F9985BF3145507AEA4 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; includeInIndex = 1; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +80,19 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
+		833988A0D774F0539D844423 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				93C12AD11CA4739028E2EA40 /* Poppins-Bold.ttf */,
+				3B70303B44390C6AFEB1F560 /* Poppins-ExtraBold.ttf */,
+				2F87826BFAD334E2AEA9B86E /* Poppins-Medium.ttf */,
+				B99C5666D2E392D47DD2A70F /* Poppins-Regular.ttf */,
+				F701C6F9985BF3145507AEA4 /* Poppins-SemiBold.ttf */,
+			);
+			name = Fonts;
+			path = ../assets/fonts;
+			sourceTree = "<group>";
+		};
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +101,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				833988A0D774F0539D844423 /* Fonts */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -164,6 +188,11 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				C059D2572BB26B2BACC5E6D9 /* PrivacyInfo.xcprivacy in Resources */,
+				49EE16D89421CAB306A1A1CE /* Poppins-Bold.ttf in Resources */,
+				D2281FD7C2FCB8D2D7885569 /* Poppins-ExtraBold.ttf in Resources */,
+				FDA289A1F52D9E4CD2F07508 /* Poppins-Medium.ttf in Resources */,
+				F2F97F35EF7D7CF4D40D03C4 /* Poppins-Regular.ttf in Resources */,
+				18CA68717AF9293A35B34CD8 /* Poppins-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

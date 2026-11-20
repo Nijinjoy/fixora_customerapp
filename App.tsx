@@ -8,7 +8,7 @@ import {
   initialWindowMetrics,
   SafeAreaProvider,
 } from 'react-native-safe-area-context';
-import { SplashScreen } from './src/components/SplashScreen';
+import { SplashScreen } from './src/screens/SplashScreen';
 import { RootNavigator } from './src/navigation/RootNavigator';
 
 function App() {

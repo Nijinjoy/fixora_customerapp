@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 type Props = {
   title: string;
@@ -25,11 +26,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    fontWeight: '600',
+    fontFamily: fonts.semibold,
     color: colors.text,
   },
   link: {
     fontSize: 12,
+    fontFamily: fonts.regular,
     color: colors.textMuted,
   },
 });

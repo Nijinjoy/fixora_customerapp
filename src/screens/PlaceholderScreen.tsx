@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, gradients } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 type Props = {
   title: string;
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontWeight: '700',
+    fontFamily: fonts.bold,
     color: colors.text,
   },
   center: {
@@ -39,6 +40,7 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 14,
+    fontFamily: fonts.regular,
     color: colors.textMuted,
   },
 });

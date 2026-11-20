@@ -18,9 +18,12 @@ import {
 } from 'lucide-react-native';
 import { CategoryTag } from '../components/CategoryTag';
 import { SectionHeader } from '../components/SectionHeader';
+import { Stars } from '../components/Stars';
 import { findProvider } from '../data/home';
+import { getReviews, timeAgo } from '../data/reviews';
 import type { RootScreenProps } from '../navigation/types';
 import { colors, gradients, shadow } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 const GUTTER = 20;
 
@@ -44,6 +47,10 @@ export function ProfileScreen({
       </View>
     );
   }
+
+  const openReviews = () =>
+    navigation.navigate('Reviews', { providerId: provider.id });
+  const recentReviews = getReviews(provider).slice(0, 2);
 
   const priceNote = provider.unit
     ? `(per ${provider.unit.replace('/', '')})`
@@ -90,7 +97,13 @@ export function ProfileScreen({
               <Text style={styles.name}>{provider.name}</Text>
               <CategoryTag label={provider.category} />
             </View>
-            <View style={styles.rating}>
+            <Pressable
+              style={styles.rating}
+              onPress={openReviews}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={`Rated ${provider.rating}, ${provider.reviews} reviews. See reviews`}
+            >
               <Star
                 size={16}
                 color={colors.star}
@@ -100,7 +113,7 @@ export function ProfileScreen({
               <Text style={styles.ratingText}>
                 {provider.rating} ({provider.reviews})
               </Text>
-            </View>
+            </Pressable>
           </View>
 
           <View style={styles.location}>
@@ -138,6 +151,45 @@ export function ProfileScreen({
               ))}
             </ScrollView>
           </View>
+
+          <View style={styles.reviews}>
+            <SectionHeader
+              title={`Reviews (${provider.reviews})`}
+              onViewAll={openReviews}
+            />
+            <Pressable
+              style={styles.reviewSummary}
+              onPress={openReviews}
+              accessibilityRole="button"
+              accessibilityLabel="See all ratings and reviews"
+            >
+              <Text style={styles.reviewScore}>
+                {provider.rating.toFixed(1)}
+              </Text>
+              <View style={styles.reviewSummaryText}>
+                <Stars rating={provider.rating} size={15} />
+                <Text style={styles.muted}>
+                  Based on {provider.reviews} reviews
+                </Text>
+              </View>
+            </Pressable>
+            {recentReviews.map(review => (
+              <View key={review.id} style={styles.reviewItem}>
+                <View style={styles.reviewHead}>
+                  <Text style={styles.reviewAuthor}>
+                    {review.avatar} {review.author}
+                  </Text>
+                  <Text style={styles.reviewDate}>
+                    {timeAgo(review.daysAgo)}
+                  </Text>
+                </View>
+                <Stars rating={review.rating} size={12} />
+                <Text style={styles.reviewText} numberOfLines={3}>
+                  {review.text}
+                </Text>
+              </View>
+            ))}
+          </View>
         </View>
       </ScrollView>
 
@@ -155,7 +207,14 @@ export function ProfileScreen({
           <MessageSquareText size={18} color={colors.text} strokeWidth={1.8} />
           <Text style={styles.outlineText}>Message</Text>
         </Pressable>
-        <Pressable style={[styles.button, styles.primary]}>
+        <Pressable
+          style={[styles.button, styles.primary]}
+          onPress={() =>
+            navigation.navigate('BookService', { providerId: provider.id })
+          }
+          accessibilityRole="button"
+          accessibilityLabel={`Book ${provider.name}`}
+        >
           <CalendarCheck size={18} color="#FFFFFF" strokeWidth={1.8} />
           <Text style={styles.primaryText}>Book Now</Text>
         </Pressable>
@@ -165,6 +224,53 @@ export function ProfileScreen({
 }
 
 const styles = StyleSheet.create({
+  reviews: {
+    marginTop: 24,
+    gap: 12,
+  },
+  reviewSummary: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    padding: 14,
+    borderRadius: 16,
+    backgroundColor: colors.background,
+  },
+  reviewScore: {
+    fontSize: 32,
+    fontFamily: fonts.bold,
+    color: colors.text,
+  },
+  reviewSummaryText: {
+    gap: 4,
+  },
+  reviewItem: {
+    gap: 6,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  reviewHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  reviewAuthor: {
+    fontSize: 14,
+    fontFamily: fonts.semibold,
+    color: colors.text,
+  },
+  reviewDate: {
+    fontSize: 11,
+    fontFamily: fonts.regular,
+    color: colors.textMuted,
+  },
+  reviewText: {
+    fontSize: 13,
+    lineHeight: 20,
+    fontFamily: fonts.regular,
+    color: colors.text,
+  },
   screen: {
     flex: 1,
     backgroundColor: colors.surface,
@@ -205,6 +311,7 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     marginBottom: 6,
     fontSize: 190,
+    fontFamily: fonts.regular,
     lineHeight: 230,
   },
   sheet: {
@@ -230,7 +337,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 20,
-    fontWeight: '600',
+    fontFamily: fonts.semibold,
     color: colors.text,
   },
   rating: {
@@ -240,6 +347,7 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 13,
+    fontFamily: fonts.regular,
     color: colors.textMuted,
   },
   location: {
@@ -250,6 +358,7 @@ const styles = StyleSheet.create({
   },
   muted: {
     fontSize: 13,
+    fontFamily: fonts.regular,
     color: colors.textMuted,
   },
   priceRow: {
@@ -260,7 +369,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 20,
-    fontWeight: '700',
+    fontFamily: fonts.bold,
     color: colors.text,
   },
   divider: {
@@ -270,12 +379,13 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 17,
-    fontWeight: '600',
+    fontFamily: fonts.semibold,
     color: colors.text,
   },
   about: {
     marginTop: 10,
     fontSize: 14,
+    fontFamily: fonts.regular,
     lineHeight: 22,
     color: colors.textMuted,
   },
@@ -319,6 +429,7 @@ const styles = StyleSheet.create({
   },
   outlineText: {
     fontSize: 15,
+    fontFamily: fonts.regular,
     color: colors.text,
   },
   primary: {
@@ -326,7 +437,7 @@ const styles = StyleSheet.create({
   },
   primaryText: {
     fontSize: 15,
-    fontWeight: '600',
+    fontFamily: fonts.semibold,
     color: '#FFFFFF',
   },
 });

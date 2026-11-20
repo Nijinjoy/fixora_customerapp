@@ -2,6 +2,7 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LayoutGridPlus } from 'lucide-react-native';
 import type { Service } from '../data/home';
 import { colors, shadow } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 const VISIBLE_COUNT = 7;
 
@@ -83,6 +84,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingHorizontal: 2,
     fontSize: 12,
+    fontFamily: fonts.regular,
     lineHeight: 15,
     textAlign: 'center',
     color: colors.text,

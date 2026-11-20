@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
-  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -22,6 +21,7 @@ import {
 } from '../data/messages';
 import type { RootScreenProps } from '../navigation/types';
 import { colors, gradients, shadow } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 const GUTTER = 16;
 
@@ -65,7 +65,7 @@ export function ChatScreen({ navigation, route }: RootScreenProps<'Chat'>) {
   return (
     <KeyboardAvoidingView
       style={styles.screen}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior="padding"
     >
       <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
         <Pressable
@@ -210,12 +210,13 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: fonts.semibold,
     color: colors.text,
   },
   status: {
     marginTop: 2,
     fontSize: 12,
+    fontFamily: fonts.regular,
     color: colors.success,
   },
   call: {
@@ -261,6 +262,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
+    fontFamily: fonts.regular,
     lineHeight: 20,
     color: colors.text,
   },
@@ -271,6 +273,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginHorizontal: 4,
     fontSize: 10,
+    fontFamily: fonts.regular,
     color: colors.textMuted,
   },
   emptyChat: {
@@ -283,12 +286,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     marginTop: 6,
     fontSize: 17,
-    fontWeight: '600',
+    fontFamily: fonts.semibold,
     color: colors.text,
   },
   emptyText: {
     textAlign: 'center',
     fontSize: 13,
+    fontFamily: fonts.regular,
     lineHeight: 19,
     color: colors.textMuted,
   },
@@ -311,6 +315,7 @@ const styles = StyleSheet.create({
     borderRadius: 23,
     backgroundColor: colors.background,
     fontSize: 14,
+    fontFamily: fonts.regular,
     color: colors.text,
   },
   send: {

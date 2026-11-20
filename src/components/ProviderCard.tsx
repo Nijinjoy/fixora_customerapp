@@ -4,13 +4,15 @@ import { Avatar } from './Avatar';
 import { CategoryTag } from './CategoryTag';
 import type { Provider } from '../data/home';
 import { colors, gradients, shadow } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 type Props = {
   provider: Provider;
   onViewProfile: (providerId: string) => void;
+  onBook: (providerId: string) => void;
 };
 
-export function ProviderCard({ provider, onViewProfile }: Props) {
+export function ProviderCard({ provider, onViewProfile, onBook }: Props) {
   return (
     <View style={styles.card}>
       <View style={styles.top}>
@@ -50,7 +52,12 @@ export function ProviderCard({ provider, onViewProfile }: Props) {
           <Eye size={15} color={colors.text} strokeWidth={1.8} />
           <Text style={styles.outlineText}>View Profile</Text>
         </Pressable>
-        <Pressable style={[styles.button, styles.primary]}>
+        <Pressable
+          style={[styles.button, styles.primary]}
+          onPress={() => onBook(provider.id)}
+          accessibilityRole="button"
+          accessibilityLabel={`Book ${provider.name}`}
+        >
           <CalendarCheck size={15} color="#FFFFFF" strokeWidth={1.8} />
           <Text style={styles.primaryText}>Book Now</Text>
         </Pressable>
@@ -76,17 +83,17 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 14,
-    fontWeight: '600',
+    fontFamily: fonts.semibold,
     color: colors.text,
   },
   price: {
     marginTop: 5,
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: fonts.medium,
     color: colors.primary,
   },
   unit: {
-    fontWeight: '400',
+    fontFamily: fonts.regular,
   },
   rating: {
     marginTop: 5,
@@ -96,6 +103,7 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 12,
+    fontFamily: fonts.regular,
     color: colors.textMuted,
   },
   actions: {
@@ -119,6 +127,7 @@ const styles = StyleSheet.create({
   },
   outlineText: {
     fontSize: 13,
+    fontFamily: fonts.regular,
     color: colors.text,
   },
   primary: {
@@ -126,7 +135,7 @@ const styles = StyleSheet.create({
   },
   primaryText: {
     fontSize: 13,
-    fontWeight: '500',
+    fontFamily: fonts.medium,
     color: '#FFFFFF',
   },
 });

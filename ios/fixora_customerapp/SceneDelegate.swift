@@ -34,8 +34,6 @@ class SceneDelegate: RCTDefaultReactNativeFactoryDelegate, UIWindowSceneDelegate
       in: window,
       connectionOptions: connectionOptions
     )
-
-   
   }
 
   func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
@@ -46,18 +44,19 @@ class SceneDelegate: RCTDefaultReactNativeFactoryDelegate, UIWindowSceneDelegate
     RCTLinkingManager.scene(scene, continue: userActivity)
   }
 
-  // Keep showing the launch screen (instead of a blank white view) while the
-  // JavaScript bundle loads, so it flows straight into the JS splash screen.
+  // Show the launch screen at the very back of the React Native root view, so it
+  // stays visible while the JS bundle loads (no blank flash) and is then covered
+  // by the JS splash screen and the app.
   override func customize(_ rootView: RCTRootView) {
     super.customize(rootView)
-    rootView.backgroundColor = UIColor(red: 31 / 255, green: 123 / 255, blue: 242 / 255, alpha: 1)
+    rootView.backgroundColor = .clear
     if let launchView = UIStoryboard(name: "LaunchScreen", bundle: nil)
       .instantiateInitialViewController()?.view
     {
+      launchView.frame = rootView.bounds
       launchView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-      rootView.loadingView = launchView
-      rootView.loadingViewFadeDelay = 0
-      rootView.loadingViewFadeDuration = 0
+      launchView.isUserInteractionEnabled = false
+      rootView.insertSubview(launchView, at: 0)
     }
   }
 

@@ -14,6 +14,7 @@ import { findProvider } from '../data/home';
 import { formatListTime, useThreads } from '../data/messages';
 import type { TabScreenProps } from '../navigation/types';
 import { colors, gradients, shadow } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 const GUTTER = 18;
 
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
   title: {
     paddingHorizontal: GUTTER,
     fontSize: 22,
-    fontWeight: '700',
+    fontFamily: fonts.bold,
     color: colors.text,
   },
   search: {
@@ -138,6 +139,7 @@ const styles = StyleSheet.create({
   searchText: {
     flex: 1,
     fontSize: 14,
+    fontFamily: fonts.regular,
     color: colors.text,
     paddingVertical: 0,
   },
@@ -167,20 +169,22 @@ const styles = StyleSheet.create({
   name: {
     flexShrink: 1,
     fontSize: 15,
-    fontWeight: '600',
+    fontFamily: fonts.semibold,
     color: colors.text,
   },
   time: {
     fontSize: 11,
+    fontFamily: fonts.regular,
     color: colors.textMuted,
   },
   unreadTime: {
     color: colors.primary,
-    fontWeight: '600',
+    fontFamily: fonts.semibold,
   },
   category: {
     marginTop: 2,
     fontSize: 11,
+    fontFamily: fonts.regular,
     color: colors.accent,
   },
   bottomLine: {
@@ -192,6 +196,7 @@ const styles = StyleSheet.create({
   preview: {
     flex: 1,
     fontSize: 13,
+    fontFamily: fonts.regular,
     color: colors.textMuted,
   },
   badge: {
@@ -205,13 +210,14 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     fontSize: 11,
-    fontWeight: '700',
+    fontFamily: fonts.bold,
     color: '#FFFFFF',
   },
   empty: {
     marginTop: 40,
     textAlign: 'center',
     fontSize: 14,
+    fontFamily: fonts.regular,
     color: colors.textMuted,
   },
 });

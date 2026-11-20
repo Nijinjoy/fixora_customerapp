@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Animated, Easing, StatusBar, StyleSheet } from 'react-native';
+import { fonts } from '../theme/fonts';
 
 const BRAND_BLUE = '#1F7BF2';
 const LOGO_SIZE = 200;
@@ -61,7 +62,7 @@ export function SplashScreen({ onFinish }: Props) {
               {
                 translateY: lift.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [0, -36],
+                  outputRange: [0, -24],
                 }),
               },
             ],
@@ -109,18 +110,19 @@ const styles = StyleSheet.create({
   textBlock: {
     position: 'absolute',
     top: '50%',
-    marginTop: 46,
+    marginTop: 40,
     alignItems: 'center',
   },
   name: {
     fontSize: 34,
-    fontWeight: '800',
+    fontFamily: fonts.extrabold,
     letterSpacing: 0.5,
     color: '#FFFFFF',
   },
   tagline: {
     marginTop: 6,
     fontSize: 14,
+    fontFamily: fonts.regular,
     color: 'rgba(255, 255, 255, 0.85)',
   },
 });

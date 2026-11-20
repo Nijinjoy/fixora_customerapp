@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { Search, SlidersHorizontal } from 'lucide-react-native';
 import { colors, shadow } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 export function SearchBar() {
   return (
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
   text: {
     flex: 1,
     fontSize: 14,
+    fontFamily: fonts.regular,
     color: colors.text,
     paddingVertical: 0,
   },

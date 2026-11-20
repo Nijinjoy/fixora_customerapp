@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { gradients } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 export function CategoryTag({ label }: { label: string }) {
   return (
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 10,
-    fontWeight: '500',
+    fontFamily: fonts.medium,
     color: '#FFFFFF',
   },
 });

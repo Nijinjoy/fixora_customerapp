@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
 import type { ScrollViewInstance } from 'react-native';
 import { colors, gradients, shadow } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 export type Chip = {
   id: string;
@@ -100,10 +101,11 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 13,
+    fontFamily: fonts.regular,
     color: colors.text,
   },
   selectedLabel: {
     color: '#FFFFFF',
-    fontWeight: '500',
+    fontFamily: fonts.medium,
   },
 });

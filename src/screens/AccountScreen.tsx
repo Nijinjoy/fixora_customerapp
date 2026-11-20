@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   Pressable,
   ScrollView,
@@ -27,8 +28,14 @@ import {
 import { Avatar } from '../components/Avatar';
 import { Toggle } from '../components/Toggle';
 import { user } from '../data/home';
+import {
+  locationLabel,
+  locationNeedsAction,
+  useCurrentLocation,
+} from '../services/currentLocation';
 import type { TabScreenProps } from '../navigation/types';
 import { colors, gradients, shadow } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 const GUTTER = 18;
 
@@ -83,6 +90,9 @@ function Section({
 
 export function AccountScreen({ navigation }: TabScreenProps<'Account'>) {
   const insets = useSafeAreaInsets();
+  const location = useCurrentLocation();
+  const locationText = locationLabel(location.state);
+  const locationIsAction = locationNeedsAction(location.state);
   const [notifications, setNotifications] = useState(true);
 
   const comingSoon = () => {};
@@ -118,10 +128,41 @@ export function AccountScreen({ navigation }: TabScreenProps<'Account'>) {
               <Phone size={13} color={colors.textMuted} strokeWidth={1.8} />
               <Text style={styles.userMetaText}>{user.phone}</Text>
             </View>
-            <View style={styles.userMeta}>
-              <MapPin size={13} color={colors.textMuted} strokeWidth={1.8} />
-              <Text style={styles.userMetaText}>{user.location}</Text>
-            </View>
+            <Pressable
+              style={styles.userMeta}
+              onPress={
+                location.state.status === 'ready'
+                  ? location.refresh
+                  : location.retry
+              }
+              disabled={location.state.status === 'loading'}
+              accessibilityRole="button"
+              accessibilityLabel={`Current location: ${locationText}`}
+            >
+              {location.state.status === 'loading' ? (
+                <ActivityIndicator
+                  size="small"
+                  color={colors.textMuted}
+                  style={styles.locationSpinner}
+                />
+              ) : (
+                <MapPin
+                  size={13}
+                  color={locationIsAction ? colors.primary : colors.textMuted}
+                  strokeWidth={1.8}
+                />
+              )}
+              <Text
+                style={[
+                  styles.userMetaText,
+                  styles.locationText,
+                  locationIsAction && styles.locationAction,
+                ]}
+                numberOfLines={1}
+              >
+                {locationText}
+              </Text>
+            </Pressable>
           </View>
           <Pressable
             style={styles.edit}
@@ -246,7 +287,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontWeight: '700',
+    fontFamily: fonts.bold,
     color: colors.text,
   },
   userCard: {
@@ -263,7 +304,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 18,
-    fontWeight: '700',
+    fontFamily: fonts.bold,
     color: colors.text,
     marginBottom: 2,
   },
@@ -272,8 +313,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
   },
+  locationText: {
+    flexShrink: 1,
+  },
+  locationAction: {
+    color: colors.primary,
+    fontFamily: fonts.medium,
+  },
+  locationSpinner: {
+    transform: [{ scale: 0.6 }],
+    width: 13,
+    height: 13,
+  },
   userMetaText: {
     fontSize: 13,
+    fontFamily: fonts.regular,
     color: '#4B5263',
   },
   edit: {
@@ -298,12 +352,13 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 20,
-    fontWeight: '700',
+    fontFamily: fonts.bold,
     color: colors.primary,
   },
   statLabel: {
     marginTop: 2,
     fontSize: 12,
+    fontFamily: fonts.regular,
     color: colors.textMuted,
   },
   statDivider: {
@@ -316,7 +371,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 15,
-    fontWeight: '600',
+    fontFamily: fonts.semibold,
     color: colors.text,
   },
   card: {
@@ -349,10 +404,12 @@ const styles = StyleSheet.create({
   rowLabel: {
     flex: 1,
     fontSize: 14,
+    fontFamily: fonts.regular,
     color: colors.text,
   },
   rowValue: {
     fontSize: 13,
+    fontFamily: fonts.regular,
     color: colors.textMuted,
   },
   logout: {
@@ -366,12 +423,13 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     fontSize: 15,
-    fontWeight: '600',
+    fontFamily: fonts.semibold,
     color: '#E5484D',
   },
   version: {
     textAlign: 'center',
     fontSize: 12,
+    fontFamily: fonts.regular,
     color: colors.textMuted,
   },
 });

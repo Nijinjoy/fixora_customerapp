@@ -1,14 +1,20 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { CalendarCheck } from 'lucide-react-native';
 import { colors, gradients } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
-export function PromoBanner() {
+export function PromoBanner({ onBook }: { onBook: () => void }) {
   return (
     <View style={styles.banner}>
       <View style={styles.content}>
         <Text style={styles.kicker}>Save 25% Today!</Text>
         <Text style={styles.title}>Exclusive discounts on home service</Text>
-        <Pressable style={styles.button}>
+        <Pressable
+          style={styles.button}
+          onPress={onBook}
+          accessibilityRole="button"
+          accessibilityLabel="Book a service"
+        >
           <CalendarCheck size={15} color="#FFFFFF" strokeWidth={2} />
           <Text style={styles.buttonText}>Book Now</Text>
         </Pressable>
@@ -36,12 +42,12 @@ const styles = StyleSheet.create({
   },
   kicker: {
     fontSize: 12,
-    fontWeight: '500',
+    fontFamily: fonts.medium,
     color: colors.accent,
   },
   title: {
     fontSize: 17,
-    fontWeight: '700',
+    fontFamily: fonts.bold,
     color: colors.text,
     lineHeight: 24,
     marginTop: 6,
@@ -60,7 +66,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 13,
-    fontWeight: '600',
+    fontFamily: fonts.semibold,
     color: '#FFFFFF',
   },
   art: {
@@ -70,6 +76,7 @@ const styles = StyleSheet.create({
   },
   worker: {
     fontSize: 104,
+    fontFamily: fonts.regular,
     lineHeight: 128,
     marginBottom: -10,
   },
@@ -78,5 +85,6 @@ const styles = StyleSheet.create({
     right: 8,
     bottom: 10,
     fontSize: 36,
+    fontFamily: fonts.regular,
   },
 });
