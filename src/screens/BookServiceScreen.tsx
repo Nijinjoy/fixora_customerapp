@@ -18,7 +18,7 @@ import {
   Search,
 } from 'lucide-react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { Avatar } from '../components/Avatar';
+import { Avatar } from '../components/common/Avatar';
 import {
   BOOKING_WINDOW_DAYS,
   MAX_RANGE_DAYS,
@@ -63,14 +63,12 @@ const MONTHS = [
 
 type DateMode = 'single' | 'range';
 
-// Units that are charged once per day of work, so a range multiplies them.
 const PER_DAY_UNITS = [undefined, '/day', '/visit'];
 
 function parseRupees(price: string) {
   return Number(price.replace(/[^\d]/g, ''));
 }
 
-// Indian digit grouping: 1,23,456.
 function formatRupees(amount: number) {
   const digits = String(Math.round(amount));
   const last3 = digits.slice(-3);
@@ -92,7 +90,6 @@ function addMonths(month: number, delta: number) {
   return new Date(date.getFullYear(), date.getMonth() + delta, 1).getTime();
 }
 
-// Calendar cells for a month: leading blanks, then each day's timestamp.
 function monthCells(month: number): (number | null)[] {
   const date = new Date(month);
   const year = date.getFullYear();
@@ -116,7 +113,6 @@ export function BookServiceScreen({
   const provider = findProvider(route.params.providerId);
   const bookings = useBookings();
 
-  // Freeze "now" for this visit so availability doesn't shift while picking.
   const [now] = useState(() => Date.now());
   const today = startOfDay(now);
   const lastMonth = monthStart(
@@ -144,7 +140,6 @@ export function BookServiceScreen({
       ? daysBetween(rangeStart, rangeEnd)
       : 0;
 
-  // A newly picked map location refills the Area field.
   useEffect(() => {
     if (location) {
       setArea(location.area ?? '');
@@ -173,7 +168,6 @@ export function BookServiceScreen({
     );
   }
 
-  // A slot picked earlier may have been taken since; only trust live slots.
   const slotStillFree = slots.some(
     s => s.startsAt === selectedSlot && s.available,
   );
@@ -274,10 +268,7 @@ export function BookServiceScreen({
       : provider.price;
 
   return (
-    <KeyboardAvoidingView
-      style={styles.screen}
-      behavior="padding"
-    >
+    <KeyboardAvoidingView style={styles.screen} behavior="padding">
       <View style={[styles.topBar, { paddingTop: insets.top + 8 }]}>
         <Pressable
           onPress={goBack}
@@ -314,7 +305,6 @@ export function BookServiceScreen({
           </Text>
         </View>
 
-        {/* Date */}
         <Text style={styles.heading}>Select Date</Text>
         <View style={styles.modes} accessibilityRole="tablist">
           {(['single', 'range'] as const).map(option => {
@@ -439,7 +429,6 @@ export function BookServiceScreen({
           </View>
         </View>
 
-        {/* Time */}
         <View style={styles.headingRow}>
           <Text style={styles.heading}>
             {days > 1 ? 'Start Time (each day)' : 'Select Time'}
@@ -502,7 +491,6 @@ export function BookServiceScreen({
           <Text style={styles.error}>{errors.slot}</Text>
         ) : null}
 
-        {/* Address */}
         <Text style={styles.heading}>Address</Text>
         <Pressable
           onPress={() =>
@@ -603,7 +591,6 @@ export function BookServiceScreen({
           placeholder="E.g. Opposite St. Mary's Church (optional)"
         />
 
-        {/* Description */}
         <View style={styles.headingRow}>
           <Text style={styles.heading}>
             Describe the work <Text style={styles.required}>*</Text>
@@ -659,7 +646,7 @@ export function BookServiceScreen({
           accessibilityLabel="Confirm booking"
           accessibilityState={{ disabled: !valid }}
         >
-          <CalendarCheck size={18} color="#FFFFFF" strokeWidth={1.8} />
+          <CalendarCheck size={18} color={colors.onPrimary} strokeWidth={1.8} />
           <Text style={styles.confirmText}>Confirm Booking</Text>
         </Pressable>
       </View>
@@ -883,7 +870,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   dayDisabled: {
-    color: '#C3C8D3',
+    color: colors.textDisabled,
     textDecorationLine: 'line-through',
   },
   dayInRange: {
@@ -894,7 +881,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.semibold,
   },
   daySelectedText: {
-    color: '#FFFFFF',
+    color: colors.onPrimary,
     fontFamily: fonts.bold,
   },
   dot: {
@@ -1004,10 +991,10 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   slotSelectedText: {
-    color: '#FFFFFF',
+    color: colors.onPrimary,
   },
   slotBookedText: {
-    color: '#C3C8D3',
+    color: colors.textDisabled,
   },
   slotTag: {
     fontSize: 10,
@@ -1025,7 +1012,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   inputError: {
-    borderColor: '#EF4444',
+    borderColor: colors.danger,
   },
   locationCard: {
     padding: 0,
@@ -1092,14 +1079,14 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontSize: 12,
     fontFamily: fonts.regular,
-    color: '#EF4444',
+    color: colors.danger,
   },
   footer: {
     paddingHorizontal: GUTTER,
     paddingTop: 12,
     gap: 10,
     backgroundColor: colors.surface,
-    boxShadow: '0px -6px 20px rgba(31, 52, 102, 0.08)',
+    boxShadow: shadow.bottomBar,
   },
   summary: {
     flexDirection: 'row',
@@ -1133,6 +1120,6 @@ const styles = StyleSheet.create({
   confirmText: {
     fontSize: 15,
     fontFamily: fonts.semibold,
-    color: '#FFFFFF',
+    color: colors.onPrimary,
   },
 });

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, Phone, SendHorizontal } from 'lucide-react-native';
-import { Avatar } from '../components/Avatar';
+import { Avatar } from '../components/common/Avatar';
 import { findProvider } from '../data/home';
 import {
   type ChatMessage,
@@ -63,10 +63,7 @@ export function ChatScreen({ navigation, route }: RootScreenProps<'Chat'>) {
   const firstName = provider.name.split(' ')[0];
 
   return (
-    <KeyboardAvoidingView
-      style={styles.screen}
-      behavior="padding"
-    >
+    <KeyboardAvoidingView style={styles.screen} behavior="padding">
       <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
         <Pressable
           onPress={goBack}
@@ -170,7 +167,7 @@ export function ChatScreen({ navigation, route }: RootScreenProps<'Chat'>) {
           accessibilityRole="button"
           accessibilityLabel="Send message"
         >
-          <SendHorizontal size={20} color="#FFFFFF" strokeWidth={2} />
+          <SendHorizontal size={20} color={colors.onPrimary} strokeWidth={2} />
         </Pressable>
       </View>
     </KeyboardAvoidingView>
@@ -267,7 +264,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   mineText: {
-    color: '#FFFFFF',
+    color: colors.onPrimary,
   },
   time: {
     marginTop: 4,
@@ -303,7 +300,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: GUTTER,
     paddingTop: 10,
     backgroundColor: colors.surface,
-    boxShadow: '0px -6px 20px rgba(31, 52, 102, 0.06)',
+    boxShadow: '0px -6px 20px rgba(1, 80, 78, 0.06)',
   },
   input: {
     flex: 1,

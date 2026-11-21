@@ -48,12 +48,9 @@ export function LocationPickerScreen({
   const [dragging, setDragging] = useState(false);
 
   const center = useRef(initial ?? DEFAULT_CENTER);
-  // Set when the map moves to a place we already have details for, so the
-  // move doesn't trigger a reverse geocode that would replace them.
   const skipGeocode = useRef(Boolean(initial));
   const geocodeId = useRef(0);
 
-  // Debounced autocomplete.
   useEffect(() => {
     const term = query.trim();
     if (term.length < 2) {
@@ -151,7 +148,6 @@ export function LocationPickerScreen({
       if (id === geocodeId.current) {
         setResolving(false);
       }
-      // A session ends with the details request.
       setSessionToken(newSessionToken());
     }
   };
@@ -191,12 +187,11 @@ export function LocationPickerScreen({
         onPress={Keyboard.dismiss}
       />
 
-      {/* Fixed pin: the map moves underneath it. */}
       <View style={styles.pinWrap} pointerEvents="none">
         <View style={[styles.pin, dragging && styles.pinLifted]}>
           <MapPin
             size={40}
-            color="#FFFFFF"
+            color={colors.onPrimary}
             fill={colors.primary}
             strokeWidth={1.5}
           />
@@ -348,7 +343,6 @@ const styles = StyleSheet.create({
     top: '50%',
     left: '50%',
     marginLeft: -20,
-    // Pin tip sits on the map centre.
     marginTop: -40,
     alignItems: 'center',
   },
@@ -462,7 +456,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     backgroundColor: colors.surface,
-    boxShadow: '0px -6px 20px rgba(31, 52, 102, 0.12)',
+    boxShadow: '0px -6px 20px rgba(1, 80, 78, 0.12)',
   },
   sheetLabel: {
     fontSize: 12,
@@ -526,6 +520,6 @@ const styles = StyleSheet.create({
   confirmText: {
     fontSize: 15,
     fontFamily: fonts.semibold,
-    color: '#FFFFFF',
+    color: colors.onPrimary,
   },
 });

@@ -3,8 +3,8 @@
     <!-- Android 12+ always shows the system splash screen; style it with the brand. -->
     <style name="LaunchTheme" parent="AppTheme">
         <item name="android:windowBackground">@drawable/launch_screen</item>
-        <item name="android:windowSplashScreenBackground">@color/brand_blue</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="android:windowSplashScreenBackground">@color/splash_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo_round</item>
     </style>
 
 </resources>

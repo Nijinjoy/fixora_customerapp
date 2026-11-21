@@ -6,20 +6,15 @@ export type Booking = {
   id: string;
   providerId: string;
   service: string;
-  // Start time on the first day.
   scheduledAt: number;
-  // Number of consecutive days, same start time each day. Defaults to 1.
   days?: number;
   address: string;
   landmark?: string;
   location?: { latitude: number; longitude: number };
   amount: string;
   status: BookingStatus;
-  // Only set for upcoming bookings: has the provider accepted yet?
   confirmed?: boolean;
-  // Only set for completed bookings the customer has rated.
   rating?: number;
-  // What the customer described when booking.
   note?: string;
 };
 
@@ -32,7 +27,6 @@ function at(daysFromToday: number, hour: number, minute = 0) {
   return date.getTime() + daysFromToday * DAY;
 }
 
-// In-memory sample data. Replace with your bookings API later.
 let bookings: Booking[] = [
   {
     id: 'BK-1042',
@@ -195,7 +189,6 @@ export function addDays(timestamp: number, days: number) {
   return date.getTime();
 }
 
-// "Tomorrow" for one day, "Tue, 18 Nov – Thu, 20 Nov" for several.
 export function formatBookingDates(scheduledAt: number, days = 1) {
   if (days <= 1) {
     return formatBookingDate(scheduledAt);

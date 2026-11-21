@@ -25,8 +25,8 @@ import {
   ShieldCheck,
   UserRound,
 } from 'lucide-react-native';
-import { Avatar } from '../components/Avatar';
-import { Toggle } from '../components/Toggle';
+import { Avatar } from '../components/common/Avatar';
+import { Toggle } from '../components/common/Toggle';
 import { user } from '../data/home';
 import {
   locationLabel,
@@ -36,6 +36,7 @@ import {
 import type { TabScreenProps } from '../navigation/types';
 import { colors, gradients, shadow } from '../theme/colors';
 import { fonts } from '../theme/fonts';
+import { useSessionStore } from '../store/sessionStore';
 
 const GUTTER = 18;
 
@@ -97,13 +98,15 @@ export function AccountScreen({ navigation }: TabScreenProps<'Account'>) {
 
   const comingSoon = () => {};
 
+  const signOut = useSessionStore(s => s.signOut);
+
   const confirmLogout = () =>
     Alert.alert(
       'Log out?',
       'You will need to sign in again to book services.',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Log out', style: 'destructive' },
+        { text: 'Log out', style: 'destructive', onPress: signOut },
       ],
     );
 
@@ -121,7 +124,7 @@ export function AccountScreen({ navigation }: TabScreenProps<'Account'>) {
         ]}
       >
         <View style={styles.userCard}>
-          <Avatar emoji={user.avatar} size={64} background="#C9D3E3" />
+          <Avatar emoji={user.avatar} size={64} background={colors.primarySoft} />
           <View style={styles.userInfo}>
             <Text style={styles.userName}>{user.name}</Text>
             <View style={styles.userMeta}>
@@ -170,7 +173,7 @@ export function AccountScreen({ navigation }: TabScreenProps<'Account'>) {
             accessibilityRole="button"
             accessibilityLabel="Edit profile"
           >
-            <Pencil size={16} color="#FFFFFF" strokeWidth={2} />
+            <Pencil size={16} color={colors.onPrimary} strokeWidth={2} />
           </Pressable>
         </View>
 
@@ -261,7 +264,7 @@ export function AccountScreen({ navigation }: TabScreenProps<'Account'>) {
           onPress={confirmLogout}
           accessibilityRole="button"
         >
-          <LogOut size={18} color="#E5484D" strokeWidth={2} />
+          <LogOut size={18} color={colors.danger} strokeWidth={2} />
           <Text style={styles.logoutText}>Log out</Text>
         </Pressable>
 
@@ -328,7 +331,7 @@ const styles = StyleSheet.create({
   userMetaText: {
     fontSize: 13,
     fontFamily: fonts.regular,
-    color: '#4B5263',
+    color: colors.textMuted,
   },
   edit: {
     width: 38,
@@ -419,12 +422,12 @@ const styles = StyleSheet.create({
     gap: 8,
     height: 52,
     borderRadius: 16,
-    backgroundColor: '#FDECEC',
+    backgroundColor: colors.dangerSoft,
   },
   logoutText: {
     fontSize: 15,
     fontFamily: fonts.semibold,
-    color: '#E5484D',
+    color: colors.danger,
   },
   version: {
     textAlign: 'center',

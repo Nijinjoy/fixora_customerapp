@@ -35,7 +35,6 @@ function seed(
   };
 }
 
-// In-memory sample data. Replace with your chat backend later.
 let threads: Record<string, Thread> = {
   '2': seed('2', 2, [
     [true, 'Hi Anil, two switches in my kitchen stopped working.', 75],

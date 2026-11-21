@@ -30,11 +30,10 @@ function getPosition(): Promise<Coordinates> {
 export type CurrentLocationState =
   | { status: 'loading' }
   | { status: 'ready'; location: PickedLocation }
-  | { status: 'denied' } // not allowed yet; can still ask
-  | { status: 'blocked' } // user said no; only Settings can change it
+  | { status: 'denied' }
+  | { status: 'blocked' }
   | { status: 'error'; message: string };
 
-/** Short label for a place, e.g. "Panampilly Nagar, Kochi". */
 export function shortLabel(location: PickedLocation): string {
   const parts = [location.area, location.city].filter(
     (p, i, all): p is string => !!p && all.indexOf(p) === i,
@@ -42,7 +41,6 @@ export function shortLabel(location: PickedLocation): string {
   return parts.length ? parts.join(', ') : location.formattedAddress;
 }
 
-/** What to show for each state, e.g. in a header or profile row. */
 export function locationLabel(state: CurrentLocationState): string {
   switch (state.status) {
     case 'loading':
@@ -58,7 +56,6 @@ export function locationLabel(state: CurrentLocationState): string {
   }
 }
 
-/** True when the label is a call to action (tap to fix) rather than a place. */
 export function locationNeedsAction(state: CurrentLocationState): boolean {
   return (
     state.status === 'denied' ||
@@ -67,13 +64,6 @@ export function locationNeedsAction(state: CurrentLocationState): boolean {
   );
 }
 
-/**
- * The device's current location as an address. By default reads GPS only if
- * location permission is already granted; with `askOnMount` it shows the
- * system permission prompt on mount if the user hasn't answered yet (never
- * opens Settings by itself). `retry` asks for permission (or opens Settings
- * if it was blocked) and tries again.
- */
 export function useCurrentLocation({ askOnMount = false } = {}) {
   const [state, setState] = useState<CurrentLocationState>({
     status: 'loading',

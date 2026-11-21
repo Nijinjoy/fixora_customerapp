@@ -253,10 +253,6 @@ const baseProviders: Provider[] = [
   },
 ];
 
-/**
- * Extra sample technicians so each service has several to compare.
- * Category, unit and gallery are copied from that service's first provider.
- */
 function alsoOffering(
   id: string,
   serviceId: string,
@@ -487,7 +483,6 @@ export const providers: Provider[] = [
   ),
 ];
 
-/** Price as a number, e.g. "₹1,000" → 1000. */
 export function priceValue(provider: Provider): number {
   return Number(provider.price.replace(/[^\d.]/g, '')) || 0;
 }

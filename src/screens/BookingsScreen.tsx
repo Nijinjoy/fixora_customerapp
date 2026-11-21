@@ -17,8 +17,8 @@ import {
   RotateCcw,
   Star,
 } from 'lucide-react-native';
-import { Avatar } from '../components/Avatar';
-import { FilterChips, type Chip } from '../components/FilterChips';
+import { Avatar } from '../components/common/Avatar';
+import { FilterChips, type Chip } from '../components/common/FilterChips';
 import {
   type Booking,
   type BookingStatus,
@@ -58,11 +58,11 @@ function statusStyle(booking: Booking): StatusStyle {
             color: colors.primary,
             background: colors.primarySoft,
           }
-        : { label: 'Pending', color: colors.accent, background: '#FFEDE4' };
+        : { label: 'Pending', color: colors.accent, background: colors.accentSoft };
     case 'completed':
-      return { label: 'Completed', color: '#15803D', background: '#DCFCE7' };
+      return { label: 'Completed', color: colors.successText, background: colors.successSoft };
     case 'cancelled':
-      return { label: 'Cancelled', color: '#B91C1C', background: '#FEE2E2' };
+      return { label: 'Cancelled', color: colors.dangerText, background: colors.dangerSoft };
   }
 }
 
@@ -75,7 +75,6 @@ export function BookingsScreen({
   const bookings = useBookings();
   const requestedTab = route.params?.tab;
 
-  // Another screen (e.g. after confirming a booking) can ask for a tab.
   useEffect(() => {
     if (requestedTab) {
       setTab(requestedTab);
@@ -91,7 +90,6 @@ export function BookingsScreen({
           const provider = findProvider(booking.providerId);
           return provider ? [{ booking, provider }] : [];
         })
-        // Soonest first for upcoming, most recent first for the rest.
         .sort((a, b) =>
           tab === 'upcoming'
             ? a.booking.scheduledAt - b.booking.scheduledAt
@@ -241,7 +239,7 @@ export function BookingsScreen({
                         icon={
                           <MessageSquareText
                             size={16}
-                            color="#FFFFFF"
+                            color={colors.onPrimary}
                             strokeWidth={1.8}
                           />
                         }
@@ -269,7 +267,7 @@ export function BookingsScreen({
                       icon={
                         <RotateCcw
                           size={16}
-                          color="#FFFFFF"
+                          color={colors.onPrimary}
                           strokeWidth={1.8}
                         />
                       }
@@ -498,7 +496,7 @@ const styles = StyleSheet.create({
   primaryText: {
     fontSize: 13,
     fontFamily: fonts.semibold,
-    color: '#FFFFFF',
+    color: colors.onPrimary,
   },
   iconButton: {
     width: 38,

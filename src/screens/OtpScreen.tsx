@@ -16,17 +16,15 @@ import { ArrowLeft, ArrowRight, ShieldCheck } from 'lucide-react-native';
 import type { RootScreenProps } from '../navigation/types';
 import { colors, gradients } from '../theme/colors';
 import { fonts } from '../theme/fonts';
+import { formatPhone } from '../utils/phone';
+import { useSessionStore } from '../store/sessionStore';
 
-// Same blue as the splash, welcome and register screens.
-const BRAND_BLUE = '#1F7BF2';
 const CODE_LENGTH = 6;
 const RESEND_SECONDS = 30;
 
-const formatPhone = (phone: string) =>
-  `+91 ${phone.slice(0, 5)} ${phone.slice(5)}`;
-
 export function OtpScreen({ navigation, route }: RootScreenProps<'Otp'>) {
   const { phone } = route.params;
+  const verifyPhone = useSessionStore(s => s.verifyPhone);
   const insets = useSafeAreaInsets();
   const inputRef = useRef<ComponentRef<typeof TextInput>>(null);
   const [code, setCode] = useState('');
@@ -55,20 +53,12 @@ export function OtpScreen({ navigation, route }: RootScreenProps<'Otp'>) {
 
   const onVerify = () => {
     if (complete) {
-      // No backend yet: any 6-digit code is accepted.
-      // Account is created; now collect the user's details.
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'CompleteProfile', params: { phone } }],
-      });
+      verifyPhone(phone);
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.screen}
-      behavior="padding"
-    >
+    <KeyboardAvoidingView style={styles.screen} behavior="padding">
       <StatusBar barStyle="light-content" />
       <ScrollView
         contentContainerStyle={styles.scroll}
@@ -84,11 +74,11 @@ export function OtpScreen({ navigation, route }: RootScreenProps<'Otp'>) {
             accessibilityRole="button"
             accessibilityLabel="Back"
           >
-            <ArrowLeft size={22} color="#FFFFFF" strokeWidth={2} />
+            <ArrowLeft size={22} color={colors.onPrimary} strokeWidth={2} />
           </Pressable>
           <View style={styles.heroBody}>
             <View style={styles.heroIcon}>
-              <ShieldCheck size={40} color="#FFFFFF" strokeWidth={1.8} />
+              <ShieldCheck size={40} color={colors.onPrimary} strokeWidth={1.8} />
             </View>
             <Text style={styles.heroTitle}>OTP Verification</Text>
             <Text style={styles.heroText}>
@@ -112,7 +102,6 @@ export function OtpScreen({ navigation, route }: RootScreenProps<'Otp'>) {
             </Text>
           </Text>
 
-          {/* One hidden input drives all boxes, so paste and SMS autofill work. */}
           <Pressable
             style={styles.boxes}
             onPress={() => inputRef.current?.focus()}
@@ -184,7 +173,7 @@ export function OtpScreen({ navigation, route }: RootScreenProps<'Otp'>) {
             accessibilityState={{ disabled: !complete }}
           >
             <Text style={styles.buttonText}>Verify</Text>
-            <ArrowRight size={18} color="#FFFFFF" strokeWidth={2.2} />
+            <ArrowRight size={18} color={colors.onPrimary} strokeWidth={2.2} />
           </Pressable>
         </View>
       </ScrollView>
@@ -195,7 +184,8 @@ export function OtpScreen({ navigation, route }: RootScreenProps<'Otp'>) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: BRAND_BLUE,
+    experimental_backgroundImage: gradients.hero,
+    backgroundColor: colors.primary,
   },
   scroll: {
     flexGrow: 1,
@@ -235,13 +225,13 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontFamily: fonts.extrabold,
     letterSpacing: 0.5,
-    color: '#FFFFFF',
+    color: colors.onPrimary,
   },
   heroText: {
     marginTop: 4,
     fontSize: 14,
     fontFamily: fonts.regular,
-    color: 'rgba(255, 255, 255, 0.85)',
+    color: colors.onPrimaryMuted,
     textAlign: 'center',
   },
   sheet: {
@@ -344,6 +334,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontFamily: fonts.semibold,
-    color: '#FFFFFF',
+    color: colors.onPrimary,
   },
 });

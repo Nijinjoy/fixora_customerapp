@@ -7,7 +7,6 @@ export type Coordinates = {
 
 export type PickedLocation = Coordinates & {
   formattedAddress: string;
-  // Neighbourhood / locality, used to prefill the Area field.
   area?: string;
   city?: string;
   pincode?: string;
@@ -25,13 +24,11 @@ type AddressComponent = {
   types: string[];
 };
 
-// Kochi — used until the customer picks a location.
 export const DEFAULT_CENTER: Coordinates = {
   latitude: 9.9312,
   longitude: 76.2673,
 };
 
-// Google bills Autocomplete + Details as one session when they share a token.
 export function newSessionToken() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, char => {
     const random = Math.floor(Math.random() * 16);
@@ -79,7 +76,6 @@ function describe(components: AddressComponent[]) {
   };
 }
 
-// Geocoding results often start with a plus code ("X7JG+H65, ...").
 function stripPlusCode(address: string) {
   return address.replace(/^[A-Z0-9]{4,8}\+[A-Z0-9]{2,3}\s*,\s*/, '');
 }
@@ -172,7 +168,6 @@ export async function reverseGeocode(
   if (body.status !== 'OK' || body.results.length === 0) {
     throw new Error(body.error_message ?? 'No address found here.');
   }
-  // Prefer a real street address over a landmark or plus code.
   const best =
     body.results.find(r =>
       r.types.some(t => ['street_address', 'premise', 'route'].includes(t)),

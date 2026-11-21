@@ -7,8 +7,8 @@ import {
   Star,
   ThumbsUp,
 } from 'lucide-react-native';
-import { Avatar } from '../components/Avatar';
-import { FilterChips } from '../components/FilterChips';
+import { Avatar } from '../components/common/Avatar';
+import { FilterChips } from '../components/common/FilterChips';
 import { priceValue, providers, services } from '../data/home';
 import type { Provider } from '../data/home';
 import type { RootScreenProps } from '../navigation/types';
@@ -28,7 +28,6 @@ const SORTS: { id: SortKey; label: string }[] = [
 const rupees = (value: number) =>
   `₹${Math.round(value).toLocaleString('en-IN')}`;
 
-/** Rating per ₹100 — higher means more quality for the money. */
 const valueScore = (p: Provider) => p.rating / (priceValue(p) / 100);
 
 export function ComparePricesScreen({
@@ -85,14 +84,14 @@ export function ComparePricesScreen({
         label: 'Lowest price',
         Icon: BadgeIndianRupee,
         color: colors.success,
-        bg: '#E3F6EA',
+        bg: colors.successSoft,
       },
       item.id === stats.topRatedId && {
         key: 'top',
         label: 'Top rated',
         Icon: Star,
-        color: '#B7791F',
-        bg: '#FFF4D6',
+        color: colors.warningText,
+        bg: colors.warningSoft,
       },
       item.id === stats.bestValueId && {
         key: 'value',
@@ -471,7 +470,7 @@ const styles = StyleSheet.create({
   primaryText: {
     fontSize: 13,
     fontFamily: fonts.semibold,
-    color: '#FFFFFF',
+    color: colors.onPrimary,
   },
   empty: {
     marginTop: 40,

@@ -28,3 +28,7 @@ jest.mock('@react-native-community/geolocation', () => ({
   requestAuthorization: jest.fn(),
   setRNConfiguration: jest.fn(),
 }));
+
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest'),
+);

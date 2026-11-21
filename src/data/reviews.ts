@@ -11,7 +11,6 @@ export type Review = {
 
 export type RatingBreakdown = Record<1 | 2 | 3 | 4 | 5, number>;
 
-// Sample data until reviews come from a backend.
 const AUTHORS: [string, string][] = [
   ['Anjali M', '👩🏽'],
   ['Rahul K', '👨🏽'],
@@ -47,9 +46,7 @@ const TEXTS: Record<1 | 2 | 3 | 4 | 5, string[]> = {
   1: ['Did not turn up at the agreed time. Had to reschedule.'],
 };
 
-/** Small deterministic PRNG so each provider always gets the same reviews. */
 function seeded(seed: string) {
-  // Park–Miller LCG; seed derived from the id's characters.
   let state = 1;
   for (let i = 0; i < seed.length; i++) {
     state = (state * 31 + seed.charCodeAt(i)) % 2147483647;
@@ -61,13 +58,9 @@ function seeded(seed: string) {
   };
 }
 
-/**
- * How many reviews gave each star rating. Totals `provider.reviews` and
- * averages out close to `provider.rating`.
- */
 export function ratingBreakdown(provider: Provider): RatingBreakdown {
   const m = Math.min(5, Math.max(3.5, provider.rating));
-  const low = (5 - m) * 0.25; // share of 1–3 star reviews
+  const low = (5 - m) * 0.25;
   const share = {
     1: low * 0.15,
     2: low * 0.25,
@@ -92,7 +85,6 @@ export function ratingBreakdown(provider: Provider): RatingBreakdown {
   return counts;
 }
 
-/** Recent written reviews for a provider, newest first. */
 export function getReviews(provider: Provider): Review[] {
   const rand = seeded(provider.id);
   const breakdown = ratingBreakdown(provider);
@@ -110,7 +102,6 @@ export function getReviews(provider: Provider): Review[] {
     return 5;
   };
 
-  // Shuffle authors so nobody reviews twice; rotate texts per star level.
   const authors = [...AUTHORS];
   for (let i = authors.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));

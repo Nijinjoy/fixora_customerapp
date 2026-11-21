@@ -19,7 +19,7 @@ import {
 } from 'lucide-react-native';
 import type { LucideIcon } from 'lucide-react-native';
 import type { RootScreenProps } from '../navigation/types';
-import { colors, shadow } from '../theme/colors';
+import { colors, gradients, shadow } from '../theme/colors';
 import { fonts } from '../theme/fonts';
 
 type Slide = {
@@ -30,9 +30,6 @@ type Slide = {
   title: string;
   body: string;
 };
-
-// Same blue as the splash screen, so the hand-off feels seamless.
-const BRAND_BLUE = '#1F7BF2';
 
 const SLIDES: Slide[] = [
   {
@@ -177,7 +174,7 @@ export function WelcomeScreen({ navigation }: RootScreenProps<'Welcome'>) {
                       inputRange,
                       outputRange: [
                         'rgba(255, 255, 255, 0.35)',
-                        '#FFFFFF',
+                        colors.onPrimary,
                         'rgba(255, 255, 255, 0.35)',
                       ],
                       extrapolate: 'clamp',
@@ -198,7 +195,7 @@ export function WelcomeScreen({ navigation }: RootScreenProps<'Welcome'>) {
           <Text style={styles.buttonText}>
             {isLast ? 'Get Started' : 'Next'}
           </Text>
-          <ArrowRight size={18} color={BRAND_BLUE} strokeWidth={2.2} />
+          <ArrowRight size={18} color={colors.primary} strokeWidth={2.2} />
         </Pressable>
       </View>
     </View>
@@ -208,7 +205,8 @@ export function WelcomeScreen({ navigation }: RootScreenProps<'Welcome'>) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: BRAND_BLUE,
+    experimental_backgroundImage: gradients.hero,
+    backgroundColor: colors.primary,
   },
   topBar: {
     height: 52,
@@ -219,7 +217,7 @@ const styles = StyleSheet.create({
   skip: {
     fontSize: 15,
     fontFamily: fonts.semibold,
-    color: 'rgba(255, 255, 255, 0.85)',
+    color: colors.onPrimaryMuted,
   },
   list: {
     flex: 1,
@@ -288,7 +286,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     lineHeight: 34,
     fontFamily: fonts.bold,
-    color: '#FFFFFF',
+    color: colors.onPrimary,
     textAlign: 'center',
   },
   body: {
@@ -296,7 +294,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 23,
     fontFamily: fonts.regular,
-    color: 'rgba(255, 255, 255, 0.85)',
+    color: colors.onPrimaryMuted,
     textAlign: 'center',
     maxWidth: 300,
   },
@@ -320,8 +318,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#FFFFFF',
-    boxShadow: '0px 6px 16px rgba(10, 40, 100, 0.25)',
+    backgroundColor: colors.surface,
+    boxShadow: shadow.raised,
   },
   pressed: {
     opacity: 0.85,
@@ -329,6 +327,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontFamily: fonts.semibold,
-    color: BRAND_BLUE,
+    color: colors.primary,
   },
 });

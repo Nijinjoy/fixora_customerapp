@@ -1,12 +1,9 @@
 import { addDays, type Booking } from './bookings';
 
-// Start hours (24h) of the slots a provider can work in a day.
 export const SLOT_HOURS = [8, 10, 12, 14, 16, 18];
 
-// How far ahead customers can book.
 export const BOOKING_WINDOW_DAYS = 60;
 
-// Longest multi-day booking allowed.
 export const MAX_RANGE_DAYS = 14;
 
 export type Slot = {
@@ -21,8 +18,6 @@ export function startOfDay(timestamp: number) {
   return date.getTime();
 }
 
-// Small deterministic hash so the sample availability is stable between
-// renders and app launches.
 function hash(text: string) {
   let value = 0;
   for (let i = 0; i < text.length; i++) {
@@ -36,14 +31,12 @@ function dayKey(day: number) {
   return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
 }
 
-// Sample schedule. Replace with the provider's real calendar from your API.
 function providerWorks(providerId: string, day: number) {
   const date = new Date(day);
   const weeklyOff = Number(providerId) % 7;
   if (date.getDay() === weeklyOff) {
     return false;
   }
-  // Roughly one extra day off in ten (leave, holidays).
   return hash(`${providerId}:${dayKey(day)}:off`) % 10 !== 0;
 }
 
@@ -59,7 +52,6 @@ export function getSlots(
 ): Slot[] {
   const dayStart = startOfDay(day);
   const works = providerWorks(providerId, dayStart);
-  // A multi-day booking blocks its start time on every day it covers.
   const taken = new Set(
     bookings
       .filter(b => b.providerId === providerId && b.status === 'upcoming')
@@ -76,7 +68,6 @@ export function getSlots(
     const startsAt = date.getTime();
     const available =
       works &&
-      // Leave the provider at least an hour to get there.
       startsAt > now + 60 * 60 * 1000 &&
       !taken.has(startsAt) &&
       !sampleTaken(providerId, dayStart, hour);
@@ -84,8 +75,6 @@ export function getSlots(
   });
 }
 
-// Slots for a run of days: a slot is free only if it is free on every day.
-// `startsAt` is the slot's time on the first day.
 export function getRangeSlots(
   providerId: string,
   firstDay: number,

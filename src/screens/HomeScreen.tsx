@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { HomeHeader } from '../components/HomeHeader';
-import { PromoBanner } from '../components/PromoBanner';
-import { ProviderCard } from '../components/ProviderCard';
-import { SearchBar } from '../components/SearchBar';
-import { SectionHeader } from '../components/SectionHeader';
-import { ServiceGrid } from '../components/ServiceGrid';
+import { HomeHeader } from '../components/home/HomeHeader';
+import { PromoBanner } from '../components/home/PromoBanner';
+import { ProviderCard } from '../components/provider/ProviderCard';
+import { SearchBar } from '../components/common/SearchBar';
+import { SectionHeader } from '../components/common/SectionHeader';
+import { ServiceGrid } from '../components/home/ServiceGrid';
 import { popularProviders, services, user } from '../data/home';
 import type { TabScreenProps } from '../navigation/types';
-import { gradients } from '../theme/colors';
+import { colors, gradients } from '../theme/colors';
 
 export function HomeScreen({ navigation, route }: TabScreenProps<'Home'>) {
   const insets = useSafeAreaInsets();
@@ -19,7 +19,6 @@ export function HomeScreen({ navigation, route }: TabScreenProps<'Home'>) {
 
   return (
     <View style={styles.screen}>
-      {/* Fixed header: stays put while the content below scrolls. */}
       <View
         style={[
           styles.header,
@@ -94,8 +93,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   headerScrolled: {
-    backgroundColor: '#E9EEF8',
-    boxShadow: '0px 6px 12px -8px rgba(31, 52, 102, 0.25)',
+    backgroundColor: colors.background,
+    boxShadow: '0px 6px 12px -8px rgba(1, 80, 78, 0.25)',
   },
   content: {
     paddingTop: 8,

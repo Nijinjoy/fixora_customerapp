@@ -16,9 +16,9 @@ import {
   MessageSquareText,
   Star,
 } from 'lucide-react-native';
-import { CategoryTag } from '../components/CategoryTag';
-import { SectionHeader } from '../components/SectionHeader';
-import { Stars } from '../components/Stars';
+import { CategoryTag } from '../components/common/CategoryTag';
+import { SectionHeader } from '../components/common/SectionHeader';
+import { Stars } from '../components/common/Stars';
 import { findProvider } from '../data/home';
 import { getReviews, timeAgo } from '../data/reviews';
 import type { RootScreenProps } from '../navigation/types';
@@ -215,7 +215,7 @@ export function ProfileScreen({
           accessibilityRole="button"
           accessibilityLabel={`Book ${provider.name}`}
         >
-          <CalendarCheck size={18} color="#FFFFFF" strokeWidth={1.8} />
+          <CalendarCheck size={18} color={colors.onPrimary} strokeWidth={1.8} />
           <Text style={styles.primaryText}>Book Now</Text>
         </Pressable>
       </View>
@@ -283,8 +283,7 @@ const styles = StyleSheet.create({
   },
   hero: {
     height: 360,
-    experimental_backgroundImage:
-      'linear-gradient(180deg, #DCD6F7 0%, #D7E3FA 60%, #E9F0FC 100%)',
+    experimental_backgroundImage: gradients.softHero,
     paddingHorizontal: GUTTER,
     alignItems: 'center',
   },
@@ -411,7 +410,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: GUTTER,
     paddingTop: 14,
     backgroundColor: colors.surface,
-    boxShadow: '0px -6px 20px rgba(31, 52, 102, 0.08)',
+    boxShadow: shadow.bottomBar,
   },
   button: {
     flex: 1,
@@ -438,6 +437,6 @@ const styles = StyleSheet.create({
   primaryText: {
     fontSize: 15,
     fontFamily: fonts.semibold,
-    color: '#FFFFFF',
+    color: colors.onPrimary,
   },
 });

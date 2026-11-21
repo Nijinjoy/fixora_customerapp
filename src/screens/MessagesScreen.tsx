@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Search } from 'lucide-react-native';
-import { Avatar } from '../components/Avatar';
+import { Avatar } from '../components/common/Avatar';
 import { findProvider } from '../data/home';
 import { formatListTime, useThreads } from '../data/messages';
 import type { TabScreenProps } from '../navigation/types';
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 11,
     fontFamily: fonts.bold,
-    color: '#FFFFFF',
+    color: colors.onPrimary,
   },
   empty: {
     marginTop: 40,

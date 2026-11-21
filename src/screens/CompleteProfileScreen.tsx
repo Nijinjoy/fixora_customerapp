@@ -1,16 +1,7 @@
-import { useState } from 'react';
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Pressable,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
-import type { TextInputProps } from 'react-native';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useCallback } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   ArrowRight,
@@ -19,149 +10,113 @@ import {
   Phone,
   UserRound,
 } from 'lucide-react-native';
-import type { LucideIcon } from 'lucide-react-native';
-import { GoogleIcon } from '../components/GoogleIcon';
-import { ProfilePhotoPicker } from '../components/ProfilePhotoPicker';
-import type { RootScreenProps } from '../navigation/types';
-import { getGoogleProfile } from '../services/googleProfile';
-import { askStartupPermissions } from '../services/permissions';
+import { Button } from '../components/common/Button';
+import { GoogleIcon } from '../components/common/GoogleIcon';
+import { TextField } from '../components/common/TextField';
+import { FormTextField } from '../components/form/FormTextField';
+import { ProfilePhotoPicker } from '../components/profile/ProfilePhotoPicker';
+import { useGoogleAutofill } from '../hooks/useGoogleAutofill';
+import { useKeyboardAwareScroll } from '../hooks/useKeyboardAwareScroll';
+import { profileSchema } from '../schemas/profileSchema';
+import type {
+  ProfileFormInput,
+  ProfileFormOutput,
+} from '../schemas/profileSchema';
+import type { GoogleProfile } from '../services/googleProfile';
+import { useSessionStore } from '../store/sessionStore';
 import { colors, gradients } from '../theme/colors';
 import { fonts } from '../theme/fonts';
+import { formatPhone } from '../utils/phone';
 
-// Same blue as the splash, welcome, register and OTP screens.
-const BRAND_BLUE = '#1F7BF2';
-const ERROR = '#E5484D';
-
-const isValidEmail = (value: string) =>
-  /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
-
-const formatPhone = (phone: string) =>
-  `+91 ${phone.slice(0, 5)} ${phone.slice(5)}`;
-
-type FieldProps = TextInputProps & {
-  label: string;
-  icon: LucideIcon;
-  error?: string;
+const DEFAULT_VALUES: ProfileFormInput = {
+  name: '',
+  email: '',
+  photo: undefined,
 };
 
-function Field({ label, icon: Icon, error, ...input }: FieldProps) {
-  const [focused, setFocused] = useState(false);
-  return (
-    <View style={styles.field}>
-      <Text style={styles.label}>{label}</Text>
-      <View
-        style={[
-          styles.input,
-          focused && styles.inputFocused,
-          !!error && styles.inputError,
-        ]}
-      >
-        <Icon size={18} color={colors.textMuted} strokeWidth={1.8} />
-        <TextInput
-          {...input}
-          onFocus={e => {
-            setFocused(true);
-            input.onFocus?.(e);
-          }}
-          onBlur={e => {
-            setFocused(false);
-            input.onBlur?.(e);
-          }}
-          placeholderTextColor={colors.textMuted}
-          style={styles.inputText}
-          accessibilityLabel={label}
-        />
-      </View>
-      {!!error && <Text style={styles.error}>{error}</Text>}
-    </View>
-  );
-}
-
-export function CompleteProfileScreen({
-  navigation,
-  route,
-}: RootScreenProps<'CompleteProfile'>) {
-  const { phone } = route.params;
+export function CompleteProfileScreen() {
+  const phone = useSessionStore(s => s.phone) ?? '';
+  const completeProfile = useSessionStore(s => s.completeProfile);
   const insets = useSafeAreaInsets();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [emailTouched, setEmailTouched] = useState(false);
-  const [photo, setPhoto] = useState<string>();
-  const [fromGoogle, setFromGoogle] = useState(false);
-  const [loadingGoogle, setLoadingGoogle] = useState(false);
+  const { keyboardHeight, keyboardOpen, scrollRef, onContentSizeChange } =
+    useKeyboardAwareScroll();
 
-  const nameValid = name.trim().length >= 2;
-  const emailValid = email.length === 0 || isValidEmail(email.trim());
-  const canContinue = nameValid && emailValid;
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    setFocus,
+    getValues,
+    formState: { isValid },
+  } = useForm<ProfileFormInput, unknown, ProfileFormOutput>({
+    resolver: zodResolver(profileSchema),
+    mode: 'onTouched',
+    defaultValues: DEFAULT_VALUES,
+  });
+  const photo = useWatch({ control, name: 'photo' });
 
-  const onGoogle = async () => {
-    setLoadingGoogle(true);
-    try {
-      const profile = await getGoogleProfile();
-      setName(profile.name);
-      setEmail(profile.email);
-      // Keep a photo the user picked themselves.
-      setPhoto(current => current ?? profile.photo);
-      setFromGoogle(true);
-    } catch (e) {
-      Alert.alert(
-        'Google unavailable',
-        e instanceof Error ? e.message : 'Please enter your details manually.',
-      );
-    } finally {
-      setLoadingGoogle(false);
-    }
-  };
+  const applyGoogleProfile = useCallback(
+    (profile: GoogleProfile) => {
+      const opts = { shouldValidate: true, shouldDirty: true } as const;
+      setValue('name', profile.name, opts);
+      setValue('email', profile.email, opts);
+      if (!getValues('photo')) {
+        setValue('photo', profile.photo);
+      }
+    },
+    [setValue, getValues],
+  );
+  const google = useGoogleAutofill(applyGoogleProfile);
 
-  const onContinue = () => {
-    setEmailTouched(true);
-    if (canContinue) {
-      // TODO: save { phone, name, email, photo } to the account once there's a backend.
-      navigation.reset({ index: 0, routes: [{ name: 'Tabs' }] });
-      // Ask once the dashboard is on screen, so the prompt has context.
-      setTimeout(askStartupPermissions, 600);
-    }
+  const onSubmit = () => {
+    handleSubmit(completeProfile)();
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.screen}
-      behavior="padding"
-    >
+    <View style={styles.screen}>
       <StatusBar barStyle="light-content" />
       <ScrollView
+        ref={scrollRef}
+        onContentSizeChange={onContentSizeChange}
         contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
         bounces={false}
         showsVerticalScrollIndicator={false}
       >
         <View style={[styles.hero, { paddingTop: insets.top + 16 }]}>
-          <ProfilePhotoPicker uri={photo} onChange={setPhoto} />
+          <ProfilePhotoPicker
+            uri={photo}
+            onChange={uri => setValue('photo', uri)}
+          />
           <Text style={styles.heroTitle}>Almost there</Text>
           <Text style={styles.heroText}>
             Add a photo and tell us a little about yourself
           </Text>
         </View>
 
-        <View style={[styles.sheet, { paddingBottom: insets.bottom + 16 }]}>
+        <View
+          style={[
+            styles.sheet,
+            {
+              paddingBottom: keyboardOpen
+                ? keyboardHeight + 16
+                : insets.bottom + 16,
+            },
+          ]}
+        >
           <Text style={styles.title}>Your details</Text>
 
-          <Pressable
-            style={({ pressed }) => [
-              styles.googleButton,
-              pressed && styles.googlePressed,
-              loadingGoogle && styles.buttonDisabled,
-            ]}
-            onPress={onGoogle}
-            disabled={loadingGoogle}
-            accessibilityRole="button"
-            accessibilityLabel="Fill details with Google"
-          >
-            <GoogleIcon size={20} />
-            <Text style={styles.googleText}>
-              {fromGoogle ? 'Filled from Google' : 'Fill details with Google'}
-            </Text>
-          </Pressable>
+          <Button
+            title={
+              google.filled ? 'Filled from Google' : 'Fill details with Google'
+            }
+            variant="outline"
+            size="md"
+            left={<GoogleIcon size={20} />}
+            loading={google.loading}
+            onPress={google.fill}
+            style={styles.googleButton}
+          />
 
           <View style={styles.orRow}>
             <View style={styles.orLine} />
@@ -169,34 +124,35 @@ export function CompleteProfileScreen({
             <View style={styles.orLine} />
           </View>
 
-          <View style={styles.field}>
-            <Text style={styles.label}>Mobile number</Text>
-            <View style={[styles.input, styles.inputLocked]}>
-              <Phone size={18} color={colors.textMuted} strokeWidth={1.8} />
-              <Text style={styles.lockedText}>{formatPhone(phone)}</Text>
-              <BadgeCheck size={18} color={colors.success} strokeWidth={2} />
-              <Text style={styles.verified}>Verified</Text>
-            </View>
-          </View>
+          <TextField
+            label="Mobile number"
+            icon={Phone}
+            value={formatPhone(phone)}
+            readOnly
+            right={<VerifiedBadge />}
+            containerStyle={styles.field}
+          />
 
-          <Field
+          <FormTextField
+            control={control}
+            name="name"
             label="Full name"
             icon={UserRound}
-            value={name}
-            onChangeText={setName}
             placeholder="Your name"
             autoCapitalize="words"
             autoComplete="name"
             textContentType="name"
             returnKeyType="next"
+            submitBehavior="submit"
+            onSubmitEditing={() => setFocus('email')}
+            containerStyle={styles.field}
           />
 
-          <Field
+          <FormTextField
+            control={control}
+            name="email"
             label="Email (optional)"
             icon={Mail}
-            value={email}
-            onChangeText={setEmail}
-            onBlur={() => setEmailTouched(true)}
             placeholder="you@example.com"
             keyboardType="email-address"
             autoCapitalize="none"
@@ -204,38 +160,37 @@ export function CompleteProfileScreen({
             autoComplete="email"
             textContentType="emailAddress"
             returnKeyType="done"
-            onSubmitEditing={onContinue}
-            error={
-              emailTouched && !emailValid
-                ? 'Enter a valid email address'
-                : undefined
-            }
+            onSubmitEditing={onSubmit}
+            containerStyle={styles.field}
           />
 
-          <Pressable
-            style={({ pressed }) => [
-              styles.button,
-              !canContinue && styles.buttonDisabled,
-              pressed && canContinue && styles.pressed,
-            ]}
-            onPress={onContinue}
-            accessibilityRole="button"
-            accessibilityLabel="Continue"
-            accessibilityState={{ disabled: !canContinue }}
-          >
-            <Text style={styles.buttonText}>Continue</Text>
-            <ArrowRight size={18} color="#FFFFFF" strokeWidth={2.2} />
-          </Pressable>
+          <Button
+            title="Continue"
+            iconRight={ArrowRight}
+            onPress={onSubmit}
+            accessibilityState={{ disabled: !isValid }}
+            style={[styles.continueButton, !isValid && styles.dimmed]}
+          />
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </View>
+  );
+}
+
+function VerifiedBadge() {
+  return (
+    <View style={styles.verified}>
+      <BadgeCheck size={18} color={colors.success} strokeWidth={2} />
+      <Text style={styles.verifiedText}>Verified</Text>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: BRAND_BLUE,
+    experimental_backgroundImage: gradients.hero,
+    backgroundColor: colors.primary,
   },
   scroll: {
     flexGrow: 1,
@@ -252,13 +207,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: fonts.extrabold,
     letterSpacing: 0.5,
-    color: '#FFFFFF',
+    color: colors.onPrimary,
   },
   heroText: {
     marginTop: 4,
     fontSize: 14,
     fontFamily: fonts.regular,
-    color: 'rgba(255, 255, 255, 0.85)',
+    color: colors.onPrimaryMuted,
     textAlign: 'center',
   },
   sheet: {
@@ -276,27 +231,9 @@ const styles = StyleSheet.create({
   },
   googleButton: {
     marginTop: 16,
-    height: 50,
-    borderRadius: 14,
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-  },
-  googlePressed: {
-    backgroundColor: colors.background,
-  },
-  googleText: {
-    fontSize: 15,
-    fontFamily: fonts.semibold,
-    color: colors.text,
   },
   orRow: {
     marginTop: 16,
-    marginBottom: 0,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
@@ -314,78 +251,20 @@ const styles = StyleSheet.create({
   field: {
     marginTop: 12,
   },
-  label: {
-    marginBottom: 6,
-    fontSize: 13,
-    fontFamily: fonts.medium,
-    color: colors.text,
-  },
-  input: {
-    height: 50,
-    borderRadius: 14,
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    backgroundColor: colors.background,
+  verified: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 14,
-    gap: 10,
+    gap: 6,
   },
-  inputFocused: {
-    borderColor: colors.primary,
-    backgroundColor: colors.surface,
-  },
-  inputError: {
-    borderColor: ERROR,
-  },
-  inputLocked: {
-    gap: 8,
-  },
-  inputText: {
-    flex: 1,
-    fontSize: 15,
-    fontFamily: fonts.medium,
-    color: colors.text,
-    paddingVertical: 0,
-  },
-  lockedText: {
-    flex: 1,
-    marginLeft: 2,
-    fontSize: 15,
-    fontFamily: fonts.medium,
-    color: colors.text,
-  },
-  verified: {
+  verifiedText: {
     fontSize: 13,
     fontFamily: fonts.semibold,
     color: colors.success,
   },
-  error: {
-    marginTop: 6,
-    fontSize: 12,
-    fontFamily: fonts.regular,
-    color: ERROR,
-  },
-  button: {
+  continueButton: {
     marginTop: 22,
-    height: 52,
-    borderRadius: 14,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    experimental_backgroundImage: gradients.primaryButton,
-    backgroundColor: colors.primary,
   },
-  buttonDisabled: {
+  dimmed: {
     opacity: 0.5,
-  },
-  pressed: {
-    opacity: 0.85,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontFamily: fonts.semibold,
-    color: '#FFFFFF',
   },
 });
